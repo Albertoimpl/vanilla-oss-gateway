@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spring-cloud-gateway.fullname" . }}
+  labels:
+    {{- include "spring-cloud-gateway.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "spring-cloud-gateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "spring-cloud-gateway.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/info
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

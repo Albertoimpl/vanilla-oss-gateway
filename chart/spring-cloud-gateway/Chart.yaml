@@ -1,0 +1,11 @@
+apiVersion: v2
+name: spring-cloud-gateway
+description: Spring Cloud Gateway test
+type: application
+
+sources:
+  - https://github.com/Albertoimpl/vanilla-oss-gateway
+
+version: 0.0.1
+appVersion: 0.0.1
+
